@@ -1,5 +1,5 @@
-use crate::command::Command;
 use crate::Result;
+use crate::command::Command;
 use super::types::{DomainName, DomainState};
 
 #[derive(Debug, Clone)]
@@ -14,30 +14,23 @@ impl Virsh {
         }
     }
 
-    /// Executes a virsh command. Encapsulates CLI syntax rules.
-    fn call(&self, args: &[&str]) -> Result<String> {
+    /// Executes a virsh subcommand using the codebase's standard binary invocation pattern.
+    fn call(&self, subcommand: &str) -> Result<String> {
         Command::new("virsh")
-            .args(args)
+            .args(&[subcommand, self.domain.as_str()])
+            .with_err(format!("Could not execute virsh {subcommand}"))
             .wait_with_output()
     }
 
     /// Returns successfully if the configured domain exists.
     pub fn exists(&self) -> Result<()> {
-        self.call(&["dominfo", self.domain.as_str()])?;
+        self.call("dominfo")?;
         Ok(())
     }
 
-    /// Returns the current runtime state of the domain.
+    /// Returns the current runtime status of the domain.
     pub fn state(&self) -> Result<DomainState> {
-        let stdout = self.call(&["domstate", self.domain.as_str()])?;
+        let stdout = self.call("domstate")?;
         Ok(DomainState::parse(&stdout))
-    }
-
-    pub fn is_running(&self) -> Result<bool> {
-        Ok(self.state()? == DomainState::Running)
-    }
-
-    pub fn is_stopped(&self) -> Result<bool> {
-        Ok(self.state()? == DomainState::Stopped)
     }
 }

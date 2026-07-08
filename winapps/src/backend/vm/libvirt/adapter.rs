@@ -1,7 +1,6 @@
 use crate::Result;
-use crate::backend::vm::VirtualMachine;
 use super::virsh::Virsh;
-use super::types::DomainName;
+use super::types::{DomainName, DomainState};
 
 #[derive(Debug, Clone)]
 pub struct LibvirtVm {
@@ -14,10 +13,14 @@ impl LibvirtVm {
             virsh: Virsh::new(domain),
         }
     }
-}
 
-impl VirtualMachine for LibvirtVm {
-    fn check_depends(&self) -> Result<()> {
+    /// Verifies if the underlying hypervisor domain exists.
+    pub fn check_depends(&self) -> Result<()> {
         self.virsh.exists()
+    }
+
+    /// Fetches the internal operational status from the driver layer.
+    pub fn state(&self) -> Result<DomainState> {
+        self.virsh.state()
     }
 }
