@@ -1,5 +1,10 @@
+use crate::Result;
+
+pub trait VirtualMachine {
+    fn check_depends(&self) -> Result<()>;
+}
+
 mod libvirt;
 
-pub(crate) use libvirt::virsh::Virsh;
-pub(crate) use libvirt::LibvirtVm; // Placeholder for the adapter
-pub use libvirt::virsh::Virsh as LibvirtDriver; // Example pattern
+// Expose the adapter internally to the backend layer
+pub(crate) use libvirt::adapter::LibvirtVm;

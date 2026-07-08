@@ -10,7 +10,9 @@ pub struct LibvirtVm {
 
 impl LibvirtVm {
     pub fn new(domain: impl Into<DomainName>) -> Self {
-        Self { virsh: Virsh::new(domain) }
+        Self {
+            virsh: Virsh::new(domain),
+        }
     }
 }
 

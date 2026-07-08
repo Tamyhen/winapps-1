@@ -15,6 +15,7 @@ impl<T: Into<String>> From<T> for DomainName {
     }
 }
 
+/// Hypervisor-independent runtime state.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DomainState {
     Running,
@@ -27,6 +28,7 @@ pub enum DomainState {
 }
 
 impl DomainState {
+    /// Zero-allocation parser that maps native libvirt strings to internal states.
     pub fn parse(s: &str) -> Self {
         match s.trim() {
             "running" => Self::Running,
@@ -42,6 +44,7 @@ impl DomainState {
 
 impl FromStr for DomainState {
     type Err = core::convert::Infallible;
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self::parse(s))
     }
@@ -55,11 +58,17 @@ mod tests {
     fn test_domain_state_parsing() {
         assert_eq!("running".parse::<DomainState>().unwrap(), DomainState::Running);
         assert_eq!("shut off".parse::<DomainState>().unwrap(), DomainState::Stopped);
-        assert!(matches!("some state".parse::<DomainState>().unwrap(), DomainState::Unknown(_)));
+        assert!(matches!(
+            "some future state".parse::<DomainState>().unwrap(),
+            DomainState::Unknown(_)
+        ));
     }
 
     #[test]
     fn trims_trailing_newline() {
-        assert_eq!(DomainState::Running, "running\n".parse::<DomainState>().unwrap());
+        assert_eq!(
+            DomainState::Running,
+            "running\n".parse::<DomainState>().unwrap(),
+        );
     }
 }
