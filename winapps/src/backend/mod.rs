@@ -6,8 +6,8 @@ use crate::{
     Config, Error, Result,
     backend::{container::Container, libvirt::Libvirt, manual::Manual},
     bail,
-//    command::Command,
-//    config::{App, AppKind},
+//    command::Command,            *****COMMENTED TO AVOID COMPILE WARMINGS*****
+//    config::{App, AppKind},      *****COMMENTED TO AVOID COMPILE WARMINGS*****
 };
 
 mod container;
