@@ -1,9 +1,13 @@
-use crate::Result;
-use super::virsh::Virsh;
-use super::types::{DomainName, DomainState};
+use super::{
+    net::parse_interface_addresses,
+    types::{DomainName, DomainState},
+    virsh::Virsh,
+};
+use crate::{Error, Result};
+use std::net::IpAddr;
 
 #[derive(Debug, Clone)]
-pub struct LibvirtVm {
+pub(crate) struct LibvirtVm {
     virsh: Virsh,
 }
 
@@ -14,13 +18,25 @@ impl LibvirtVm {
         }
     }
 
-    /// Verifies if the underlying hypervisor domain exists.
     pub fn check_depends(&self) -> Result<()> {
         self.virsh.exists()
     }
 
-    /// Fetches the internal operational status from the driver layer.
     pub fn state(&self) -> Result<DomainState> {
         self.virsh.state()
+    }
+
+    // Inside src/backend/vm/libvirt/adapter.rs
+    pub fn get_ip(&self) -> Result<IpAddr> {
+        let raw_output = self.virsh.domifaddr()?;
+
+        parse_interface_addresses(&raw_output)
+            .next()
+            // Swap out with the confirmed operational error variant from your inspection step
+            .ok_or_else(|| {
+                Error::Message(
+                    "No active IPv4 mapping resolved for the domain".to_string(),
+                )
+            })
     }
 }

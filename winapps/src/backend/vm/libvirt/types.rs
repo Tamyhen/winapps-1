@@ -54,19 +54,31 @@ mod tests {
 
     #[test]
     fn test_domain_state_parsing() {
-        assert_eq!("running".parse::<DomainState>().unwrap(), DomainState::Running);
-        assert_eq!("shut off".parse::<DomainState>().unwrap(), DomainState::Stopped);
-        assert_eq!("blocked".parse::<DomainState>().unwrap(), DomainState::Blocked);
-        assert_eq!("crashed".parse::<DomainState>().unwrap(), DomainState::Crashed);
-        assert_eq!("pmsuspended".parse::<DomainState>().unwrap(), DomainState::Suspended);
+        assert_eq!(
+            "running".parse::<DomainState>().unwrap(),
+            DomainState::Running
+        );
+        assert_eq!(
+            "shut off".parse::<DomainState>().unwrap(),
+            DomainState::Stopped
+        );
+        assert_eq!(
+            "blocked".parse::<DomainState>().unwrap(),
+            DomainState::Blocked
+        );
+        assert_eq!(
+            "crashed".parse::<DomainState>().unwrap(),
+            DomainState::Crashed
+        );
+        assert_eq!(
+            "pmsuspended".parse::<DomainState>().unwrap(),
+            DomainState::Suspended
+        );
     }
 
     #[test]
     fn trims_whitespace() {
-        assert_eq!(
-            DomainState::Running,
-            DomainState::parse("  running \t\n")
-        );
+        assert_eq!(DomainState::Running, DomainState::parse("  running \t\n"));
     }
 
     #[test]
