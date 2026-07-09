@@ -63,7 +63,11 @@ impl Command {
                 format!(
                     "{}@{}",
                     config.auth.username,
-                    config.get_host().expect("RDP host endpoint must be resolvable")).as_str(),
+                    config
+                        .get_host()
+                        .expect("RDP host endpoint must be resolvable")
+                )
+                .as_str(),
                 "-oStrictHostKeyChecking=accept-new",
                 "-oWarnWeakCrypto=no-pq-kex",
                 "-p",

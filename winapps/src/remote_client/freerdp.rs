@@ -19,7 +19,13 @@ impl Freerdp {
                 format!("/d:{}", &config.auth.domain),
                 format!("/u:{}", &config.auth.username),
                 format!("/p:{}", &config.auth.password),
-                format!("/v:{}:{}", &config.get_host().expect("RDP host endpoint must be resolvable"), &config.auth.rdp_port),
+                format!(
+                    "/v:{}:{}",
+                    &config
+                        .get_host()
+                        .expect("RDP host endpoint must be resolvable"),
+                    &config.auth.rdp_port
+                ),
             ])
             .args(config.freerdp.extra_args.iter().cloned())
             .loud(config.debug)

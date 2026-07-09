@@ -3,11 +3,13 @@ use std::net::IpAddr;
 use enum_dispatch::enum_dispatch;
 
 use crate::{
-    Config, Error, Result,
+    Config,
+    Error,
+    Result,
     backend::{container::Container, libvirt::Libvirt, manual::Manual},
     bail,
-//    command::Command,
-//    config::{App, AppKind},
+    //    command::Command,
+    //    config::{App, AppKind},
 };
 
 mod container;

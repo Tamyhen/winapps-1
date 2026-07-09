@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct DomainName(String);
+pub struct DomainName(pub String); // Ensure the field '0' is public if you need to access it outside this module
 
 impl DomainName {
     pub fn as_str(&self) -> &str {
@@ -9,14 +9,15 @@ impl DomainName {
     }
 }
 
-impl<T: Into<String>> From<T> for DomainName {
-    fn from(value: T) -> Self {
-        Self(value.into())
+impl From<String> for DomainName {
+    fn from(s: String) -> Self {
+        Self(s)
     }
 }
 
 /// Operational state of a libvirt guest domain.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[allow(dead_code)] //removes compiler warning unused DomainState
 pub enum DomainState {
     Running,
     Paused,
@@ -28,6 +29,7 @@ pub enum DomainState {
 }
 
 impl DomainState {
+    #[allow(dead_code)] //compiler warning unused parse
     pub fn parse(s: &str) -> Self {
         match s.trim() {
             "running" => Self::Running,

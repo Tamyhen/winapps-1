@@ -16,7 +16,7 @@ impl Backend for Libvirt {
             Error::Config("Libvirt domain name configuration must not be empty")
         );
 
-        let vm = LibvirtVm::new(&config.libvirt.vm_name);
+        let vm = LibvirtVm::new(config.libvirt.vm_name.clone().into());
         vm.check_depends()?;
 
         match vm.state() {
@@ -32,7 +32,7 @@ impl Backend for Libvirt {
     }
 
     fn get_host(self, config: &Config) -> Result<IpAddr> {
-        let vm = LibvirtVm::new(&config.libvirt.vm_name);
+        let vm = LibvirtVm::new(config.libvirt.vm_name.clone().into());
         let ip = vm.get_ip()?;
 
         tracing::debug!(
