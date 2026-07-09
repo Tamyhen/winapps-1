@@ -10,3 +10,6 @@ winapps.iml
 .direnv
 .wakatime-project
 .envrc
+
+# git worktrees
+.worktrees
